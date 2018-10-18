@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-6 col-md-6">
+        <div class="row">CSS</div>
+        <div class="row"><textarea id=css name=css></textarea></div>
+        <div class="row"><input type=button onclick="transfer()" value="Transfer" /></div>
+      </div>
+      <div class="col-6 col-md-6">
+        <div class="row">JQuery</div>
+        <div class="row"><textarea id=jquery name=jquery></textarea></div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script>
+  String.prototype.trim = function(){
+    return this.replace(/(?:(?:\r\n|\r|\n)\s*){2}/gm, "").replace(/^\s+|\s+$/gm, "");
+  }
+    function transfer(){
+      var css = $("#css").val();
+      if(css){
+        css = css.replace(/(?:(?:\r\n|\r|\n)\s*){2}/gm, "");
+        var cssArray = css.split("}");
+        var jqueryText = "";
+        cssArray.map(item => {
+          console.log(item);
+          var tempArray = item.split("{");
+          if(tempArray.length == 2){
+            var name = tempArray[0];
+            var styles = tempArray[1].split(";");
+            var styleStr = "";
+            styles.map(item => {
+              var oneStyle = item.split(":");
+              if(oneStyle.length == 2){
+                var styleName =oneStyle[0].trim();
+                var styleContent = oneStyle[1].trim();
+                styleStr += ".css(\""+styleName+"\",\""+styleContent+"\")";
+              }
+
+            })
+            jqueryText += "$(\""+name.trim()+"\")"+styleStr+"\n";
+          }
+        })
+        console.log("jqueryText:"+jqueryText);
+      }
+    }
+
+  </script>
+</body>
+</html>
